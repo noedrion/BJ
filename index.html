@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bonne journée</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f4ef;
+      --ink: #1a1814;
+      --accent: #b8a89a;
+      --divider: #d9d0c7;
+      --hover: #e8e0d6;
+      --col-z: #2c2420;
+      --col-n: #1a2020;
+      --digit-size: clamp(5rem, 14vw, 10rem);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow: hidden;
+    }
+
+    /* Subtle grain texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      padding: 0 5vw;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 3.5vh 0 2.5vh;
+      gap: 0.6em;
+    }
+
+    .title-ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(0.75rem, 1.8vw, 1rem);
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      padding-bottom: 0.15em;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 400;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .header-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--divider) 20%, var(--divider) 80%, transparent);
+      margin-top: 0.5vh;
+    }
+
+    /* ─── COLUMNS ─── */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0;
+      align-items: center;
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3vh;
+      padding: 2vh 4vw;
+      height: 100%;
+    }
+
+    .col-label {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .col-z .col-label { color: #7a6a60; }
+    .col-n .col-label { color: #506060; }
+
+    .digit-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .digit {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: var(--digit-size);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), opacity 0.15s;
+      display: block;
+      min-width: 1.5ch;
+      text-align: center;
+    }
+
+    .digit.bump {
+      animation: bump 0.28s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    @keyframes bump {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .digit.dip {
+      animation: dip 0.22s ease;
+    }
+
+    @keyframes dip {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(0.88); }
+      100% { transform: scale(1); }
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn-row {
+      display: flex;
+      gap: 1.4vw;
+      align-items: center;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(42px, 5.5vw, 64px);
+      height: clamp(42px, 5.5vw, 64px);
+      border: 1px solid var(--divider);
+      background: transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 300;
+      color: var(--ink);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      line-height: 1;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover {
+      background: var(--hover);
+      border-color: var(--accent);
+      transform: scale(1.07);
+    }
+
+    .btn:active {
+      transform: scale(0.94);
+    }
+
+    .btn-minus { color: var(--accent); }
+
+    /* ─── DIVIDER ─── */
+    .col-divider {
+      width: 1px;
+      height: 55vh;
+      background: linear-gradient(180deg, transparent, var(--divider) 20%, var(--divider) 80%, transparent);
+      align-self: center;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2vh;
+      padding-bottom: 3vh;
+    }
+
+    .footer-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--divider) 20%, var(--divider) 80%, transparent);
+      margin-bottom: 0.5vh;
+    }
+
+    .footer-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(0.65rem, 1.3vw, 0.82rem);
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+
+    /* ─── TOTAL BAR ─── */
+    .total-bar {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .total-bar span {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15em;
+      color: var(--ink);
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <div style="display:flex;align-items:baseline;gap:0.6em;justify-content:center;">
+        <span class="title-ornament">✦</span>
+        <h1>Bonne journée</h1>
+        <span class="title-ornament">✦</span>
+      </div>
+      <div class="header-line"></div>
+    </div>
+  </header>
+
+  <!-- COLUMNS -->
+  <main class="columns">
+
+    <!-- Z -->
+    <section class="col col-z">
+      <div class="col-label">Z</div>
+      <div class="digit-wrapper">
+        <span class="digit" id="digit-z">0</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-minus" onclick="change('z', -1)" aria-label="Moins">−</button>
+        <button class="btn btn-plus"  onclick="change('z', +1)" aria-label="Plus">+</button>
+      </div>
+    </section>
+
+    <div class="col-divider"></div>
+
+    <!-- N -->
+    <section class="col col-n">
+      <div class="col-label">N</div>
+      <div class="digit-wrapper">
+        <span class="digit" id="digit-n">0</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-minus" onclick="change('n', -1)" aria-label="Moins">−</button>
+        <button class="btn btn-plus"  onclick="change('n', +1)" aria-label="Plus">+</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-line"></div>
+    <div class="total-bar">Total &nbsp;—&nbsp; <span id="total">0</span></div>
+    <div class="footer-note"></div>
+  </footer>
+
+</div>
+
+<script>
+  const state = { z: 0, n: 0 };
+
+  function load() {
+    const saved = localStorage.getItem('bonne-journee-counters');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        state.z = parsed.z ?? 0;
+        state.n = parsed.n ?? 0;
+      } catch(_) {}
+    }
+    render();
+  }
+
+  function save() {
+    localStorage.setItem('bonne-journee-counters', JSON.stringify(state));
+  }
+
+  function render() {
+    document.getElementById('digit-z').textContent = state.z;
+    document.getElementById('digit-n').textContent = state.n;
+    document.getElementById('total').textContent   = state.z + state.n;
+  }
+
+  function change(col, delta) {
+    state[col] += delta;
+    save();
+
+    const el = document.getElementById('digit-' + col);
+    el.classList.remove('bump', 'dip');
+    // Force reflow
+    void el.offsetWidth;
+    el.classList.add(delta > 0 ? 'bump' : 'dip');
+    el.addEventListener('animationend', () => el.classList.remove('bump', 'dip'), { once: true });
+
+    render();
+  }
+
+  load();
+</script>
+
+</body>
+</html>
