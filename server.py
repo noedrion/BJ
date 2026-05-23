@@ -2,9 +2,10 @@ import os, json
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import sqlite3
 
-DB = os.environ.get("DB", "counters.db")
+DB = os.environ.get("DB", "/data/counters.db")
 
 def init_db():
+    os.makedirs(os.path.dirname(DB), exist_ok=True)
     con = sqlite3.connect(DB)
     con.execute("CREATE TABLE IF NOT EXISTS counters (id TEXT PRIMARY KEY, val INTEGER DEFAULT 0)")
     con.execute("INSERT OR IGNORE INTO counters VALUES ('z', 0)")
@@ -18,47 +19,52 @@ def get_counters():
     con.close()
     return rows
 
-def set_counter(col, val):
+def set_counters(z=None, n=None):
     con = sqlite3.connect(DB)
-    con.execute("UPDATE counters SET val=? WHERE id=?", (val, col))
+    if z is not None:
+        con.execute("UPDATE counters SET val=? WHERE id='z'", (z,))
+    if n is not None:
+        con.execute("UPDATE counters SET val=? WHERE id='n'", (n,))
     con.commit()
     con.close()
+
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a): pass
 
     def do_GET(self):
         if self.path == "/api/counters":
-            self._json(get_counters())
+            body = json.dumps(get_counters()).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", len(body))
+            self.end_headers()
+            self.wfile.write(body)
         else:
-            self._file()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            with open(os.path.join(HERE, "index.html"), "rb") as f:
+                self.wfile.write(f.read())
 
     def do_POST(self):
         if self.path == "/api/counters":
             length = int(self.headers.get("Content-Length", 0))
             body = json.loads(self.rfile.read(length))
-            for col in ("z", "n"):
-                if col in body:
-                    set_counter(col, body[col])
-            self._json(get_counters())
-
-    def _json(self, data):
-        body = json.dumps(data).encode()
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", len(body))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def _file(self):
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
-        self.end_headers()
-        with open("index.html", "rb") as f:
-            self.wfile.write(f.read())
+            set_counters(
+                z=body["z"] if "z" in body else None,
+                n=body["n"] if "n" in body else None,
+            )
+            result = json.dumps(get_counters()).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", len(result))
+            self.end_headers()
+            self.wfile.write(result)
 
 if __name__ == "__main__":
     init_db()
     port = int(os.environ.get("PORT", 3000))
-    print(f"http://localhost:{port}  (DB: {DB})")
+    print(f"Bonne journée → http://localhost:{port}  (DB: {DB})")
     HTTPServer(("0.0.0.0", port), Handler).serve_forever()
