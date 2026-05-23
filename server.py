@@ -2,7 +2,7 @@ import os, json
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import sqlite3
 
-DB = "counters.db"
+DB = os.environ.get("DB", "counters.db")
 
 def init_db():
     con = sqlite3.connect(DB)
@@ -60,5 +60,5 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     init_db()
     port = int(os.environ.get("PORT", 3000))
-    print(f"http://localhost:{port}")
+    print(f"http://localhost:{port}  (DB: {DB})")
     HTTPServer(("0.0.0.0", port), Handler).serve_forever()
