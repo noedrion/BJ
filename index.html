@@ -91,7 +91,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.6vh;
+      gap: clamp(0.8vh, 1.4vh, 12px);
       padding: 2vh 2vw 1.5vh;
     }
 
@@ -167,11 +167,18 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
-      padding: 0.6vh 1vw;
+      padding: clamp(4px, 0.6vh, 8px) 1vw;
       border: 1px solid var(--rule);
       border-radius: 8px;
       background: rgba(255,255,255,0.5);
       min-width: clamp(80px, 14vw, 120px);
+    }
+
+    .streak-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(1.2rem, 3.5vw, 2.6rem);
+      line-height: 1;
     }
 
     .streak-dots { display: flex; gap: 4px; align-items: center; min-height: 8px; }
@@ -181,12 +188,6 @@
       border-radius: 50%;
     }
 
-    .streak-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 400;
-      font-size: clamp(1.6rem, 4.5vw, 2.6rem);
-      line-height: 1;
-    }
     .col-z .streak-num.good { color: var(--z); }
     .col-z .streak-num.bad  { color: var(--z2); }
     .col-n .streak-num.good { color: var(--n); }
@@ -206,32 +207,59 @@
     @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.18)} 100%{transform:scale(1)} }
 
     /* chart */
-    .chart-wrap { width: 100%; }
+    .chart-wrap {
+      width: 100%;
+      margin-top: 10px;
+      border-top: 1px solid var(--rule);
+      padding-top: 8px;
+    }
 
     .chart {
       display: flex;
       align-items: flex-end;
       justify-content: center;
       gap: clamp(10px, 2.5vw, 22px);
-      height: clamp(70px, 12vh, 110px);
+      height: 60px;
       padding: 0 8px;
+      overflow: hidden;
     }
 
-    .bar-group { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: clamp(28px, 6vw, 46px);
+    }
 
     .bar {
-      width: clamp(28px, 6vw, 46px);
+      width: 100%;
       border-radius: 4px 4px 0 0;
       transition: height .4s cubic-bezier(.4,0,.2,1);
       min-height: 3px;
     }
+
+    .chart-labels {
+      display: flex;
+      justify-content: center;
+      gap: clamp(10px, 2.5vw, 22px);
+      padding: 4px 8px 0;
+    }
+
+    .chart-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      width: clamp(28px, 6vw, 46px);
+    }
+
+    .bar-val { font-size: clamp(0.6rem, 1.1vw, 0.72rem); color: var(--muted); line-height: 1; }
+    .bar-lbl { font-style: italic; font-size: clamp(0.58rem, 1vw, 0.68rem); color: var(--muted); line-height: 1; }
+
     .col-z .bar.good { background: var(--z); }
     .col-z .bar.bad  { background: var(--z-light); border: 1px solid var(--z2); }
     .col-n .bar.good { background: var(--n); }
     .col-n .bar.bad  { background: var(--n-light); border: 1px solid var(--n2); }
-
-    .bar-val { font-size: clamp(0.6rem, 1.1vw, 0.72rem); color: var(--muted); }
-    .bar-lbl { font-style: italic; font-size: clamp(0.58rem, 1vw, 0.68rem); color: var(--muted); }
 
     .col-total {
       font-family: 'Cormorant Garamond', serif;
@@ -402,13 +430,19 @@
       <div class="chart-wrap">
         <div class="chart">
           <div class="bar-group">
-            <div class="bar-val" id="bv-zg">0</div>
             <div class="bar good" id="bar-zg" style="height:3px"></div>
-            <div class="bar-lbl">☀︎</div>
           </div>
           <div class="bar-group">
-            <div class="bar-val" id="bv-zb">0</div>
             <div class="bar bad" id="bar-zb" style="height:3px"></div>
+          </div>
+        </div>
+        <div class="chart-labels">
+          <div class="chart-label">
+            <div class="bar-val" id="bv-zg">0</div>
+            <div class="bar-lbl">☀︎</div>
+          </div>
+          <div class="chart-label">
+            <div class="bar-val" id="bv-zb">0</div>
             <div class="bar-lbl">☁︎</div>
           </div>
         </div>
@@ -451,13 +485,19 @@
       <div class="chart-wrap">
         <div class="chart">
           <div class="bar-group">
-            <div class="bar-val" id="bv-ng">0</div>
             <div class="bar good" id="bar-ng" style="height:3px"></div>
-            <div class="bar-lbl">☀︎</div>
           </div>
           <div class="bar-group">
-            <div class="bar-val" id="bv-nb">0</div>
             <div class="bar bad" id="bar-nb" style="height:3px"></div>
+          </div>
+        </div>
+        <div class="chart-labels">
+          <div class="chart-label">
+            <div class="bar-val" id="bv-ng">0</div>
+            <div class="bar-lbl">☀︎</div>
+          </div>
+          <div class="chart-label">
+            <div class="bar-val" id="bv-nb">0</div>
             <div class="bar-lbl">☁︎</div>
           </div>
         </div>
@@ -490,7 +530,7 @@
 <script>
   /* ── state ── */
   const state = { z: { g: 0, b: 0 }, n: { g: 0, b: 0 } };
-  const MAX_H = 90;
+  const MAX_H = 70;
 
   /* ── streak history (localStorage, per device) ── */
   function loadHist(p)   { try { return JSON.parse(localStorage.getItem('hist-'+p) || '[]'); } catch(e) { return []; } }
