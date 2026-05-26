@@ -4,12 +4,14 @@ import sqlite3
 
 DB = os.environ.get("DB", "/data/counters.db")
 
+KEYS = ("zg", "zb", "ng", "nb")
+
 def init_db():
     os.makedirs(os.path.dirname(DB), exist_ok=True)
     con = sqlite3.connect(DB)
     con.execute("CREATE TABLE IF NOT EXISTS counters (id TEXT PRIMARY KEY, val INTEGER DEFAULT 0)")
-    con.execute("INSERT OR IGNORE INTO counters VALUES ('z', 0)")
-    con.execute("INSERT OR IGNORE INTO counters VALUES ('n', 0)")
+    for k in KEYS:
+        con.execute("INSERT OR IGNORE INTO counters VALUES (?, 0)", (k,))
     con.commit()
     con.close()
 
@@ -17,14 +19,13 @@ def get_counters():
     con = sqlite3.connect(DB)
     rows = dict(con.execute("SELECT id, val FROM counters").fetchall())
     con.close()
-    return rows
+    return {k: rows.get(k, 0) for k in KEYS}
 
-def set_counters(z=None, n=None):
+def set_counters(data):
     con = sqlite3.connect(DB)
-    if z is not None:
-        con.execute("UPDATE counters SET val=? WHERE id='z'", (z,))
-    if n is not None:
-        con.execute("UPDATE counters SET val=? WHERE id='n'", (n,))
+    for k in KEYS:
+        if k in data:
+            con.execute("UPDATE counters SET val=? WHERE id=?", (int(data[k]), k))
     con.commit()
     con.close()
 
@@ -51,11 +52,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/api/counters":
             length = int(self.headers.get("Content-Length", 0))
-            body = json.loads(self.rfile.read(length))
-            set_counters(
-                z=body["z"] if "z" in body else None,
-                n=body["n"] if "n" in body else None,
-            )
+            body   = json.loads(self.rfile.read(length))
+            set_counters(body)
             result = json.dumps(get_counters()).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
