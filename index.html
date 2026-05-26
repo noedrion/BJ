@@ -22,7 +22,6 @@
       --muted:   #7A6E66;
       --paper:   #F8F3EC;
       --rule:    #D8CFBF;
-      --digit:   clamp(4.5rem, 13vw, 7.5rem);
     }
 
     html, body {
@@ -51,7 +50,6 @@
 
     header {
       background: var(--ink);
-      color: var(--paper);
       text-align: center;
       padding: 2.4vh 2rem 2vh;
     }
@@ -93,13 +91,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2.2vh;
+      gap: 1.6vh;
       padding: 2vh 2vw 1.5vh;
     }
 
     .col-z { background: linear-gradient(160deg, var(--z-bg) 0%, var(--paper) 65%); }
     .col-n { background: linear-gradient(200deg, var(--n-bg) 0%, var(--paper) 65%); }
 
+    /* avatar */
     .avatar {
       width: clamp(38px, 5vw, 52px);
       height: clamp(38px, 5vw, 52px);
@@ -108,35 +107,13 @@
       font-family: 'Cinzel', serif;
       font-size: clamp(0.9rem, 1.8vw, 1.15rem);
       font-weight: 500;
-      letter-spacing: 0.04em;
     }
-
     .av-z { background: var(--z-light); color: var(--z); }
     .av-n { background: var(--n-light); color: var(--n); }
 
-    .digit {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: var(--digit);
-      line-height: 1;
-      letter-spacing: -0.02em;
-    }
-
-    .col-z .digit { color: var(--z); }
-    .col-n .digit { color: var(--n); }
-
-    .digit.bump { animation: bump .3s cubic-bezier(.34,1.56,.64,1); }
-    .digit.dip  { animation: dip  .22s ease; }
-    @keyframes bump { 0%{transform:scale(1)} 45%{transform:scale(1.13)} 100%{transform:scale(1)} }
-    @keyframes dip  { 0%{transform:scale(1)} 40%{transform:scale(0.86)} 100%{transform:scale(1)} }
-
-    .types {
-      display: flex;
-      gap: 1.2vw;
-      align-items: flex-start;
-    }
-
-    .type { display: flex; flex-direction: column; align-items: center; gap: 0.5vh; }
+    /* types (bonne / mauvaise) */
+    .types { display: flex; gap: 1.2vw; align-items: flex-start; }
+    .type  { display: flex; flex-direction: column; align-items: center; gap: 0.5vh; }
 
     .type-lbl {
       font-style: italic; font-weight: 300;
@@ -148,10 +125,8 @@
     .type-count {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-      font-weight: 400;
-      line-height: 1;
+      font-weight: 400; line-height: 1;
     }
-
     .col-z .type-count { color: var(--z); }
     .col-n .type-count { color: var(--n); }
 
@@ -173,7 +148,6 @@
       -webkit-tap-highlight-color: transparent;
       transition: background .15s, transform .12s;
     }
-
     .col-z .btn { border-color: var(--z2); color: var(--z); }
     .col-z .btn:hover { background: var(--z-light); }
     .col-n .btn { border-color: var(--n2); color: var(--n); }
@@ -181,100 +155,144 @@
     .btn:active { transform: scale(0.9); }
 
     .type-vsep {
-      width: 1px;
-      min-height: 72px;
+      width: 1px; min-height: 72px;
       background: var(--rule);
       align-self: stretch;
       margin: 0 0.3vw;
     }
 
-    .chart-wrap { width: 100%; }
+    /* streak */
+    .streak {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 0.6vh 1vw;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.5);
+      min-width: clamp(80px, 14vw, 120px);
+    }
 
-    .chart-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(0.52rem, 1vw, 0.6rem);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+    .streak-dots { display: flex; gap: 4px; align-items: center; min-height: 8px; }
+
+    .streak-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+    }
+
+    .streak-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+      line-height: 1;
+    }
+    .col-z .streak-num.good { color: var(--z); }
+    .col-z .streak-num.bad  { color: var(--z2); }
+    .col-n .streak-num.good { color: var(--n); }
+    .col-n .streak-num.bad  { color: var(--n2); }
+    .streak-num.empty       { color: var(--rule); }
+
+    .streak-lbl {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+      letter-spacing: 0.07em;
       color: var(--muted);
       text-align: center;
-      margin-bottom: 0.6vh;
     }
+
+    .streak-num.pop { animation: pop .3s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.18)} 100%{transform:scale(1)} }
+
+    /* chart */
+    .chart-wrap { width: 100%; }
 
     .chart {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 10px;
-      height: clamp(52px, 8vh, 72px);
+      gap: clamp(10px, 2.5vw, 22px);
+      height: clamp(70px, 12vh, 110px);
       padding: 0 8px;
     }
 
     .bar-group { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 
     .bar {
-      width: clamp(24px, 5vw, 36px);
-      border-radius: 3px 3px 0 0;
-      transition: height .35s cubic-bezier(.4,0,.2,1);
+      width: clamp(28px, 6vw, 46px);
+      border-radius: 4px 4px 0 0;
+      transition: height .4s cubic-bezier(.4,0,.2,1);
       min-height: 3px;
     }
-
     .col-z .bar.good { background: var(--z); }
     .col-z .bar.bad  { background: var(--z-light); border: 1px solid var(--z2); }
     .col-n .bar.good { background: var(--n); }
     .col-n .bar.bad  { background: var(--n-light); border: 1px solid var(--n2); }
 
-    .bar-val { font-size: clamp(0.6rem, 1.1vw, 0.68rem); color: var(--muted); }
-    .bar-lbl { font-style: italic; font-size: clamp(0.58rem, 1vw, 0.65rem); color: var(--muted); }
+    .bar-val { font-size: clamp(0.6rem, 1.1vw, 0.72rem); color: var(--muted); }
+    .bar-lbl { font-style: italic; font-size: clamp(0.58rem, 1vw, 0.68rem); color: var(--muted); }
 
+    .col-total {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+      color: var(--muted);
+      opacity: 0.65;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    .bump { animation: bump .3s cubic-bezier(.34,1.56,.64,1); }
+    .dip  { animation: dip  .22s ease; }
+    @keyframes bump { 0%{transform:scale(1)} 45%{transform:scale(1.12)} 100%{transform:scale(1)} }
+    @keyframes dip  { 0%{transform:scale(1)} 40%{transform:scale(0.87)} 100%{transform:scale(1)} }
+
+    /* footer */
     footer {
       display: flex;
       align-items: baseline;
       justify-content: center;
-      gap: 0.8rem;
-      padding: 1.2vh 1.5rem 2vh;
+      gap: 0.5rem;
+      padding: 0.8vh 1.5rem 1.5vh;
       border-top: 1px solid var(--rule);
       background: var(--paper);
     }
 
     .footer-lbl {
       font-family: 'Cinzel', serif;
-      font-size: clamp(0.55rem, 1.1vw, 0.65rem);
-      letter-spacing: 0.25em;
+      font-size: clamp(0.48rem, 0.9vw, 0.56rem);
+      letter-spacing: 0.22em;
       color: var(--muted);
+      opacity: 0.7;
     }
 
     .footer-total {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(1.3rem, 3vw, 1.8rem);
-      color: var(--ink);
-      line-height: 1;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+      color: var(--muted);
+      opacity: 0.8;
     }
 
     .footer-status {
       font-style: italic;
-      font-size: clamp(0.58rem, 1.1vw, 0.68rem);
+      font-size: clamp(0.5rem, 0.9vw, 0.6rem);
       color: var(--muted);
-      opacity: .7;
+      opacity: .5;
       min-height: 1em;
-      margin-left: 0.5rem;
+      margin-left: 0.3rem;
     }
 
-    /* ── POPUP ── */
+    /* popup */
     .popup-overlay {
       position: fixed; inset: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
       background: rgba(28,24,20,0.38);
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
       transition: opacity .25s ease;
     }
-
-    .popup-overlay.show {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .popup-overlay.show { opacity: 1; pointer-events: all; }
 
     .popup {
       position: relative;
@@ -288,11 +306,7 @@
       transition: transform .3s cubic-bezier(.34,1.36,.64,1), opacity .25s ease;
       opacity: 0;
     }
-
-    .popup-overlay.show .popup {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
+    .popup-overlay.show .popup { transform: translateY(0) scale(1); opacity: 1; }
 
     .popup-accent {
       display: block;
@@ -306,8 +320,7 @@
 
     .popup-msg {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
+      font-style: italic; font-weight: 300;
       font-size: clamp(1.15rem, 2.8vw, 1.4rem);
       line-height: 1.55;
       color: var(--ink);
@@ -324,14 +337,12 @@
       font-size: 0.58rem;
       letter-spacing: 0.22em;
       color: var(--muted);
-      background: none;
-      border: none;
+      background: none; border: none;
       cursor: pointer;
       padding: 0.3rem 0.8rem;
       text-transform: uppercase;
       transition: color .15s;
     }
-
     .popup-close:hover { color: var(--ink); }
 
     .popup-dot {
@@ -340,7 +351,6 @@
       border-radius: 50%;
       margin-bottom: 0.8rem;
     }
-
     .dot-good-z { background: var(--z); }
     .dot-bad-z  { background: var(--z-light); border: 1px solid var(--z2); }
     .dot-good-n { background: var(--n); }
@@ -362,7 +372,6 @@
     <!-- Z -->
     <section class="col col-z">
       <div class="avatar av-z">Z</div>
-      <span class="digit" id="digit-z">—</span>
 
       <div class="types">
         <div class="type">
@@ -384,8 +393,13 @@
         </div>
       </div>
 
+      <div class="streak" id="streak-z">
+        <div class="streak-dots" id="dots-z"></div>
+        <div class="streak-num empty" id="snum-z">—</div>
+        <div class="streak-lbl" id="slbl-z">série de suite</div>
+      </div>
+
       <div class="chart-wrap">
-        <div class="chart-title"></div>
         <div class="chart">
           <div class="bar-group">
             <div class="bar-val" id="bv-zg">0</div>
@@ -398,6 +412,7 @@
             <div class="bar-lbl">☁︎</div>
           </div>
         </div>
+        <div class="col-total" id="total-z">—</div>
       </div>
     </section>
 
@@ -406,7 +421,6 @@
     <!-- N -->
     <section class="col col-n">
       <div class="avatar av-n">N</div>
-      <span class="digit" id="digit-n">—</span>
 
       <div class="types">
         <div class="type">
@@ -428,8 +442,13 @@
         </div>
       </div>
 
+      <div class="streak" id="streak-n">
+        <div class="streak-dots" id="dots-n"></div>
+        <div class="streak-num empty" id="snum-n">—</div>
+        <div class="streak-lbl" id="slbl-n">série de suite</div>
+      </div>
+
       <div class="chart-wrap">
-        <div class="chart-title"></div>
         <div class="chart">
           <div class="bar-group">
             <div class="bar-val" id="bv-ng">0</div>
@@ -442,6 +461,7 @@
             <div class="bar-lbl">☁︎</div>
           </div>
         </div>
+        <div class="col-total" id="total-n">—</div>
       </div>
     </section>
 
@@ -468,10 +488,63 @@
 </div>
 
 <script>
+  /* ── state ── */
   const state = { z: { g: 0, b: 0 }, n: { g: 0, b: 0 } };
-  const MAX_H = 58;
+  const MAX_H = 90;
 
-  /* ── messages ── */
+  /* ── streak history (localStorage, per device) ── */
+  function loadHist(p)   { try { return JSON.parse(localStorage.getItem('hist-'+p) || '[]'); } catch(e) { return []; } }
+  function saveHist(p,h) { try { localStorage.setItem('hist-'+p, JSON.stringify(h)); } catch(e) {} }
+
+  const hist = { z: loadHist('z'), n: loadHist('n') };
+
+  function computeStreak(h) {
+    if (!h.length) return { count: 0, type: null };
+    const last = h[h.length - 1];
+    let count = 0;
+    for (let i = h.length - 1; i >= 0 && h[i] === last; i--) count++;
+    return { count, type: last };
+  }
+
+  function renderStreak(p) {
+    const s      = computeStreak(hist[p]);
+    const numEl  = document.getElementById('snum-' + p);
+    const lblEl  = document.getElementById('slbl-' + p);
+    const dotsEl = document.getElementById('dots-' + p);
+
+    if (s.count === 0) {
+      numEl.textContent = '—';
+      numEl.className   = 'streak-num empty';
+      lblEl.textContent = 'série de suite';
+      dotsEl.innerHTML  = '';
+      return;
+    }
+
+    numEl.textContent = s.count;
+    numEl.className   = 'streak-num ' + (s.type === 'g' ? 'good' : 'bad');
+
+    const plural = s.count > 1 ? 's' : '';
+    lblEl.textContent = (s.type === 'g' ? 'bonne' : 'mauvaise') + plural + ' de suite';
+
+    const col    = s.type === 'g'
+      ? (p === 'z' ? 'var(--z)' : 'var(--n)')
+      : (p === 'z' ? 'var(--z-light)' : 'var(--n-light)');
+    const border = s.type === 'b'
+      ? (p === 'z' ? '1px solid var(--z2)' : '1px solid var(--n2)')
+      : 'none';
+    const shown  = Math.min(s.count, 6);
+    dotsEl.innerHTML = Array.from({ length: shown }, (_, i) => {
+      const op = (i === shown - 1 && s.count > shown) ? 'opacity:.35;' : '';
+      return `<div class="streak-dot" style="background:${col};border:${border};${op}"></div>`;
+    }).join('');
+
+    numEl.classList.remove('pop');
+    void numEl.offsetWidth;
+    numEl.classList.add('pop');
+    numEl.addEventListener('animationend', () => numEl.classList.remove('pop'), { once: true });
+  }
+
+  /* ── popup messages ── */
   const MSGS = {
     good: [
       "Le soleil brille même quand on ne le voit pas.",
@@ -541,40 +614,36 @@
     ],
   };
 
-  function pickMsg(pool) {
-    return pool[Math.floor(Math.random() * pool.length)];
-  }
+  function pickMsg(pool) { return pool[Math.floor(Math.random() * pool.length)]; }
 
   /* ── popup ── */
   let popupTimer = null;
 
   function showPopup(person, type, delta) {
-    const overlay = document.getElementById('overlay');
-    const dot     = document.getElementById('popup-dot');
-    const accent  = document.getElementById('popup-accent');
-    const msg     = document.getElementById('popup-msg');
+    const dot    = document.getElementById('popup-dot');
+    const accent = document.getElementById('popup-accent');
+    const msg    = document.getElementById('popup-msg');
 
     let pool, dotClass, accentText;
-
     if (delta < 0) {
-      pool      = MSGS.minus;
-      dotClass  = type === 'g' ? `dot-good-${person}` : `dot-bad-${person}`;
+      pool       = MSGS.minus;
+      dotClass   = type === 'g' ? 'dot-good-' + person : 'dot-bad-' + person;
       accentText = '— correction —';
     } else if (type === 'g') {
-      pool      = MSGS.good;
-      dotClass  = `dot-good-${person}`;
+      pool       = MSGS.good;
+      dotClass   = 'dot-good-' + person;
       accentText = person === 'z' ? '— Z · bonne journée —' : '— N · bonne journée —';
     } else {
-      pool      = MSGS.bad;
-      dotClass  = `dot-bad-${person}`;
+      pool       = MSGS.bad;
+      dotClass   = 'dot-bad-' + person;
       accentText = person === 'z' ? '— Z · mauvaise journée —' : '— N · mauvaise journée —';
     }
 
-    dot.className   = 'popup-dot ' + dotClass;
+    dot.className      = 'popup-dot ' + dotClass;
     accent.textContent = accentText;
     msg.textContent    = pickMsg(pool);
 
-    overlay.classList.add('show');
+    document.getElementById('overlay').classList.add('show');
     if (popupTimer) clearTimeout(popupTimer);
     popupTimer = setTimeout(hidePopup, 4800);
   }
@@ -590,9 +659,55 @@
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape') hidePopup(); });
 
-  /* ── counters ── */
+  /* ── render ── */
   function barH(v, mx) { return mx ? Math.max(3, Math.round(v / mx * MAX_H)) : 3; }
 
+  function render() {
+    const vals = [state.z.g, state.z.b, state.n.g, state.n.b];
+    const mx   = Math.max(...vals, 1);
+
+    [['zg', state.z.g], ['zb', state.z.b], ['ng', state.n.g], ['nb', state.n.b]].forEach(([k, v]) => {
+      document.getElementById('count-' + k).textContent = v;
+      document.getElementById('bv-'    + k).textContent = v;
+      document.getElementById('bar-'   + k).style.height = barH(v, mx) + 'px';
+    });
+
+    const tz = state.z.g + state.z.b;
+    const tn = state.n.g + state.n.b;
+    document.getElementById('total-z').textContent = tz + ' journée' + (tz > 1 ? 's' : '');
+    document.getElementById('total-n').textContent = tn + ' journée' + (tn > 1 ? 's' : '');
+    document.getElementById('total').textContent   = vals.reduce((a, b) => a + b, 0);
+  }
+
+  /* ── change ── */
+  function change(person, type, delta) {
+    const prev = state[person][type];
+    state[person][type] = Math.max(0, prev + delta);
+    if (state[person][type] === prev && delta < 0) return;
+
+    render();
+    save();
+    showPopup(person, type, delta);
+
+    /* update streak history */
+    if (delta > 0) {
+      hist[person].push(type);
+      if (hist[person].length > 60) hist[person].shift();
+    } else {
+      hist[person].pop();
+    }
+    saveHist(person, hist[person]);
+    renderStreak(person);
+
+    /* bar bump animation */
+    const barEl = document.getElementById('bar-' + person + type);
+    barEl.classList.remove('bump', 'dip');
+    void barEl.offsetWidth;
+    barEl.classList.add(delta > 0 ? 'bump' : 'dip');
+    barEl.addEventListener('animationend', () => barEl.classList.remove('bump', 'dip'), { once: true });
+  }
+
+  /* ── server ── */
   async function load() {
     try {
       const res  = await fetch('/api/counters');
@@ -602,6 +717,8 @@
       state.n.g = data.ng ?? 0;
       state.n.b = data.nb ?? 0;
       render();
+      renderStreak('z');
+      renderStreak('n');
       setStatus('');
     } catch(e) {
       setStatus('Erreur de connexion');
@@ -613,47 +730,13 @@
       const res = await fetch('/api/counters', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          zg: state.z.g, zb: state.z.b,
-          ng: state.n.g, nb: state.n.b,
-        })
+        body: JSON.stringify({ zg: state.z.g, zb: state.z.b, ng: state.n.g, nb: state.n.b })
       });
       if (!res.ok) throw new Error();
       setStatus('');
     } catch(e) {
       setStatus('Erreur de sauvegarde');
     }
-  }
-
-  function render() {
-    const vals = [state.z.g, state.z.b, state.n.g, state.n.b];
-    const mx   = Math.max(...vals, 1);
-
-    document.getElementById('digit-z').textContent = state.z.g + state.z.b;
-    document.getElementById('digit-n').textContent = state.n.g + state.n.b;
-
-    [['zg', state.z.g], ['zb', state.z.b], ['ng', state.n.g], ['nb', state.n.b]].forEach(([k, v]) => {
-      document.getElementById('count-' + k).textContent = v;
-      document.getElementById('bv-'    + k).textContent = v;
-      document.getElementById('bar-'   + k).style.height = barH(v, mx) + 'px';
-    });
-
-    document.getElementById('total').textContent = vals.reduce((a, b) => a + b, 0);
-  }
-
-  function change(person, type, delta) {
-    const prev = state[person][type];
-    state[person][type] = Math.max(0, prev + delta);
-    if (state[person][type] === prev && delta < 0) return; // déjà à zéro, pas de popup
-    render();
-    save();
-    showPopup(person, type, delta);
-
-    const el = document.getElementById('digit-' + person);
-    el.classList.remove('bump', 'dip');
-    void el.offsetWidth;
-    el.classList.add(delta > 0 ? 'bump' : 'dip');
-    el.addEventListener('animationend', () => el.classList.remove('bump', 'dip'), { once: true });
   }
 
   function setStatus(msg) { document.getElementById('status').textContent = msg; }
