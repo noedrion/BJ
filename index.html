@@ -5,22 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bonne journée</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f7f4ef;
-      --ink: #1a1814;
-      --accent: #b8a89a;
-      --divider: #d9d0c7;
-      --hover: #e8e0d6;
-      --digit-size: clamp(5rem, 14vw, 10rem);
+      --z:       #8B3E2F;
+      --z2:      #C47A60;
+      --z-bg:    #FAF0EB;
+      --z-light: #F5D9CC;
+      --n:       #2B5F6B;
+      --n2:      #5A9EAB;
+      --n-bg:    #EAF4F6;
+      --n-light: #C3E0E8;
+      --ink:     #1C1814;
+      --muted:   #7A6E66;
+      --paper:   #F8F3EC;
+      --rule:    #D8CFBF;
+      --digit:   clamp(4.5rem, 13vw, 7.5rem);
     }
 
     html, body {
       height: 100%;
-      background: var(--bg);
+      background: var(--paper);
       color: var(--ink);
       font-family: 'Cormorant Garamond', Georgia, serif;
       overflow: hidden;
@@ -28,60 +35,57 @@
 
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      pointer-events: none;
-      z-index: 0;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: 0.07;
+      background-image:
+        repeating-linear-gradient(0deg,   transparent, transparent 79px, var(--z) 79px, var(--z) 80px),
+        repeating-linear-gradient(90deg,  transparent, transparent 79px, var(--n) 79px, var(--n) 80px);
     }
 
     .page {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       display: grid;
       grid-template-rows: auto 1fr auto;
       height: 100vh;
-      padding: 0 5vw;
     }
 
     header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 3.5vh 0 2.5vh;
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      padding: 2.4vh 2rem 2vh;
     }
 
-    .title-ornament {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(0.75rem, 1.8vw, 1rem);
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      padding-bottom: 0.15em;
+    .header-sub {
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+      letter-spacing: 0.2em;
+      color: #B8A898;
+      margin-bottom: 0.35em;
     }
 
     h1 {
       font-family: 'Cinzel', serif;
       font-weight: 400;
-      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--ink);
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      letter-spacing: 0.28em;
+      color: var(--paper);
     }
 
-    .header-line {
-      width: 100%;
+    .header-rule {
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--divider) 20%, var(--divider) 80%, transparent);
-      margin-top: 0.5vh;
+      background: linear-gradient(90deg, transparent, #5A5048 20%, #5A5048 80%, transparent);
+      margin-top: 1.4vh;
     }
 
     .columns {
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
+      grid-template-columns: 1fr 1px 1fr;
+      overflow: hidden;
+    }
+
+    .col-divider {
+      background: linear-gradient(180deg, transparent, var(--rule) 10%, var(--rule) 90%, transparent);
     }
 
     .col {
@@ -89,134 +93,258 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3vh;
-      padding: 2vh 4vw;
-      height: 100%;
+      gap: 2.2vh;
+      padding: 2vh 2vw 1.5vh;
     }
 
-    .col-label {
+    .col-z { background: linear-gradient(160deg, var(--z-bg) 0%, var(--paper) 65%); }
+    .col-n { background: linear-gradient(200deg, var(--n-bg) 0%, var(--paper) 65%); }
+
+    .avatar {
+      width: clamp(38px, 5vw, 52px);
+      height: clamp(38px, 5vw, 52px);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
       font-family: 'Cinzel', serif;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
+      font-size: clamp(0.9rem, 1.8vw, 1.15rem);
       font-weight: 500;
+      letter-spacing: 0.04em;
     }
 
-    .col-z .col-label { color: #7a6a60; }
-    .col-n .col-label { color: #506060; }
-
-    .digit-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .av-z { background: var(--z-light); color: var(--z); }
+    .av-n { background: var(--n-light); color: var(--n); }
 
     .digit {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
-      font-size: var(--digit-size);
+      font-size: var(--digit);
       line-height: 1;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-      display: block;
-      min-width: 1.5ch;
-      text-align: center;
+      letter-spacing: -0.02em;
     }
 
-    .digit.bump { animation: bump 0.28s cubic-bezier(.34,1.56,.64,1); }
-    @keyframes bump {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(1.12); }
-      100% { transform: scale(1); }
-    }
+    .col-z .digit { color: var(--z); }
+    .col-n .digit { color: var(--n); }
 
-    .digit.dip { animation: dip 0.22s ease; }
-    @keyframes dip {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(0.88); }
-      100% { transform: scale(1); }
-    }
+    .digit.bump { animation: bump .3s cubic-bezier(.34,1.56,.64,1); }
+    .digit.dip  { animation: dip  .22s ease; }
+    @keyframes bump { 0%{transform:scale(1)} 45%{transform:scale(1.13)} 100%{transform:scale(1)} }
+    @keyframes dip  { 0%{transform:scale(1)} 40%{transform:scale(0.86)} 100%{transform:scale(1)} }
 
-    .btn-row {
+    .types {
       display: flex;
-      gap: 1.4vw;
-      align-items: center;
+      gap: 1.2vw;
+      align-items: flex-start;
     }
+
+    .type { display: flex; flex-direction: column; align-items: center; gap: 0.5vh; }
+
+    .type-lbl {
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.6rem, 1.3vw, 0.72rem);
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .type-count {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .col-z .type-count { color: var(--z); }
+    .col-n .type-count { color: var(--n); }
+
+    .btn-row { display: flex; gap: 0.5vw; }
 
     .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: clamp(42px, 5.5vw, 64px);
-      height: clamp(42px, 5.5vw, 64px);
-      border: 1px solid var(--divider);
-      background: transparent;
+      width:  clamp(34px, 4.5vw, 46px);
+      height: clamp(34px, 4.5vw, 46px);
       border-radius: 50%;
+      border: 1px solid;
+      background: transparent;
       cursor: pointer;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
       font-weight: 300;
-      color: var(--ink);
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center;
       line-height: 1;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+      transition: background .15s, transform .12s;
     }
 
-    .btn:hover  { background: var(--hover); border-color: var(--accent); transform: scale(1.07); }
-    .btn:active { transform: scale(0.94); }
-    .btn-minus  { color: var(--accent); }
+    .col-z .btn { border-color: var(--z2); color: var(--z); }
+    .col-z .btn:hover { background: var(--z-light); }
+    .col-n .btn { border-color: var(--n2); color: var(--n); }
+    .col-n .btn:hover { background: var(--n-light); }
+    .btn:active { transform: scale(0.9); }
 
-    .col-divider {
+    .type-vsep {
       width: 1px;
-      height: 55vh;
-      background: linear-gradient(180deg, transparent, var(--divider) 20%, var(--divider) 80%, transparent);
-      align-self: center;
+      min-height: 72px;
+      background: var(--rule);
+      align-self: stretch;
+      margin: 0 0.3vw;
     }
+
+    .chart-wrap { width: 100%; }
+
+    .chart-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.52rem, 1vw, 0.6rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.6vh;
+    }
+
+    .chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 10px;
+      height: clamp(52px, 8vh, 72px);
+      padding: 0 8px;
+    }
+
+    .bar-group { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+
+    .bar {
+      width: clamp(24px, 5vw, 36px);
+      border-radius: 3px 3px 0 0;
+      transition: height .35s cubic-bezier(.4,0,.2,1);
+      min-height: 3px;
+    }
+
+    .col-z .bar.good { background: var(--z); }
+    .col-z .bar.bad  { background: var(--z-light); border: 1px solid var(--z2); }
+    .col-n .bar.good { background: var(--n); }
+    .col-n .bar.bad  { background: var(--n-light); border: 1px solid var(--n2); }
+
+    .bar-val { font-size: clamp(0.6rem, 1.1vw, 0.68rem); color: var(--muted); }
+    .bar-lbl { font-style: italic; font-size: clamp(0.58rem, 1vw, 0.65rem); color: var(--muted); }
 
     footer {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2vh;
-      padding-bottom: 3vh;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 1.2vh 1.5rem 2vh;
+      border-top: 1px solid var(--rule);
+      background: var(--paper);
     }
 
-    .footer-line {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--divider) 20%, var(--divider) 80%, transparent);
-      margin-bottom: 0.5vh;
+    .footer-lbl {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.55rem, 1.1vw, 0.65rem);
+      letter-spacing: 0.25em;
+      color: var(--muted);
     }
 
-    .footer-note {
+    .footer-total {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-weight: 300;
-      font-size: clamp(0.65rem, 1.3vw, 0.82rem);
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      opacity: 0.7;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .footer-status {
+      font-style: italic;
+      font-size: clamp(0.58rem, 1.1vw, 0.68rem);
+      color: var(--muted);
+      opacity: .7;
       min-height: 1em;
+      margin-left: 0.5rem;
     }
 
-    .total-bar {
+    /* ── POPUP ── */
+    .popup-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(28,24,20,0.38);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .popup-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .popup {
+      position: relative;
+      max-width: min(380px, 88vw);
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 2.2rem 2rem 1.6rem;
+      text-align: center;
+      transform: translateY(18px) scale(0.96);
+      transition: transform .3s cubic-bezier(.34,1.36,.64,1), opacity .25s ease;
+      opacity: 0;
+    }
+
+    .popup-overlay.show .popup {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .popup-accent {
+      display: block;
       font-family: 'Cinzel', serif;
-      font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+      font-size: 0.55rem;
       letter-spacing: 0.3em;
-      color: var(--accent);
       text-transform: uppercase;
-      opacity: 0.85;
+      color: var(--muted);
+      margin-bottom: 1rem;
     }
 
-    .total-bar span {
+    .popup-msg {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: 1.15em;
+      font-weight: 300;
+      font-size: clamp(1.15rem, 2.8vw, 1.4rem);
+      line-height: 1.55;
       color: var(--ink);
-      opacity: 0.9;
     }
+
+    .popup-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+      margin: 1.2rem 0 1rem;
+    }
+
+    .popup-close {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem 0.8rem;
+      text-transform: uppercase;
+      transition: color .15s;
+    }
+
+    .popup-close:hover { color: var(--ink); }
+
+    .popup-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-bottom: 0.8rem;
+    }
+
+    .dot-good-z { background: var(--z); }
+    .dot-bad-z  { background: var(--z-light); border: 1px solid var(--z2); }
+    .dot-good-n { background: var(--n); }
+    .dot-bad-n  { background: var(--n-light); border: 1px solid var(--n2); }
   </style>
 </head>
 <body>
@@ -224,61 +352,255 @@
 <div class="page">
 
   <header>
-    <div>
-      <div style="display:flex;align-items:baseline;gap:0.6em;justify-content:center;">
-        <span class="title-ornament">✦</span>
-        <h1>Bonne journée</h1>
-        <span class="title-ornament">✦</span>
-      </div>
-      <div class="header-line"></div>
-    </div>
+    <div class="header-sub">— journal des journées —</div>
+    <h1>Bonne journée</h1>
+    <div class="header-rule"></div>
   </header>
 
   <main class="columns">
 
+    <!-- Z -->
     <section class="col col-z">
-      <div class="col-label">Z</div>
-      <div class="digit-wrapper">
-        <span class="digit" id="digit-z">—</span>
+      <div class="avatar av-z">Z</div>
+      <span class="digit" id="digit-z">—</span>
+
+      <div class="types">
+        <div class="type">
+          <div class="type-lbl">bonne</div>
+          <div class="type-count" id="count-zg">0</div>
+          <div class="btn-row">
+            <button class="btn" onclick="change('z','g',-1)" aria-label="Moins bonne journée Z">−</button>
+            <button class="btn" onclick="change('z','g',+1)" aria-label="Plus bonne journée Z">+</button>
+          </div>
+        </div>
+        <div class="type-vsep"></div>
+        <div class="type">
+          <div class="type-lbl">mauvaise</div>
+          <div class="type-count" id="count-zb">0</div>
+          <div class="btn-row">
+            <button class="btn" onclick="change('z','b',-1)" aria-label="Moins mauvaise journée Z">−</button>
+            <button class="btn" onclick="change('z','b',+1)" aria-label="Plus mauvaise journée Z">+</button>
+          </div>
+        </div>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-minus" onclick="change('z', -1)" aria-label="Moins">−</button>
-        <button class="btn btn-plus"  onclick="change('z', +1)" aria-label="Plus">+</button>
+
+      <div class="chart-wrap">
+        <div class="chart-title">journées</div>
+        <div class="chart">
+          <div class="bar-group">
+            <div class="bar-val" id="bv-zg">0</div>
+            <div class="bar good" id="bar-zg" style="height:3px"></div>
+            <div class="bar-lbl">☀︎</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-val" id="bv-zb">0</div>
+            <div class="bar bad" id="bar-zb" style="height:3px"></div>
+            <div class="bar-lbl">☁︎</div>
+          </div>
+        </div>
       </div>
     </section>
 
     <div class="col-divider"></div>
 
+    <!-- N -->
     <section class="col col-n">
-      <div class="col-label">N</div>
-      <div class="digit-wrapper">
-        <span class="digit" id="digit-n">—</span>
+      <div class="avatar av-n">N</div>
+      <span class="digit" id="digit-n">—</span>
+
+      <div class="types">
+        <div class="type">
+          <div class="type-lbl">bonne</div>
+          <div class="type-count" id="count-ng">0</div>
+          <div class="btn-row">
+            <button class="btn" onclick="change('n','g',-1)" aria-label="Moins bonne journée N">−</button>
+            <button class="btn" onclick="change('n','g',+1)" aria-label="Plus bonne journée N">+</button>
+          </div>
+        </div>
+        <div class="type-vsep"></div>
+        <div class="type">
+          <div class="type-lbl">mauvaise</div>
+          <div class="type-count" id="count-nb">0</div>
+          <div class="btn-row">
+            <button class="btn" onclick="change('n','b',-1)" aria-label="Moins mauvaise journée N">−</button>
+            <button class="btn" onclick="change('n','b',+1)" aria-label="Plus mauvaise journée N">+</button>
+          </div>
+        </div>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-minus" onclick="change('n', -1)" aria-label="Moins">−</button>
-        <button class="btn btn-plus"  onclick="change('n', +1)" aria-label="Plus">+</button>
+
+      <div class="chart-wrap">
+        <div class="chart-title">journées</div>
+        <div class="chart">
+          <div class="bar-group">
+            <div class="bar-val" id="bv-ng">0</div>
+            <div class="bar good" id="bar-ng" style="height:3px"></div>
+            <div class="bar-lbl">☀︎</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-val" id="bv-nb">0</div>
+            <div class="bar bad" id="bar-nb" style="height:3px"></div>
+            <div class="bar-lbl">☁︎</div>
+          </div>
+        </div>
       </div>
     </section>
 
   </main>
 
   <footer>
-    <div class="footer-line"></div>
-    <div class="total-bar">Total &nbsp;—&nbsp; <span id="total"> </span></div>
-    <div class="footer-note" id="status">Chargement…</div>
+    <span class="footer-lbl">Total</span>
+    <span class="footer-total" id="total"> </span>
+    <span class="footer-lbl">journées</span>
+    <span class="footer-status" id="status">Chargement…</span>
   </footer>
 
 </div>
 
+<!-- POPUP -->
+<div class="popup-overlay" id="overlay" onclick="closePopup(event)">
+  <div class="popup" id="popup">
+    <span class="popup-dot" id="popup-dot"></span>
+    <span class="popup-accent" id="popup-accent"></span>
+    <p class="popup-msg" id="popup-msg"></p>
+    <div class="popup-rule"></div>
+    <button class="popup-close" onclick="hidePopup()">Fermer</button>
+  </div>
+</div>
+
 <script>
-  const state = { z: 0, n: 0 };
+  const state = { z: { g: 0, b: 0 }, n: { g: 0, b: 0 } };
+  const MAX_H = 58;
+
+  /* ── messages ── */
+  const MSGS = {
+    good: [
+      "Le soleil brille même quand on ne le voit pas.",
+      "Une bonne journée de plus dans la collection.",
+      "C'est dans les petits bonheurs que se cachent les grands.",
+      "Quelque chose s'est bien passé aujourd'hui — c'est suffisant.",
+      "La douceur existe, et tu en as eu une part.",
+      "Une journée comme celle-là mérite d'être notée.",
+      "Il paraît que les bonnes journées reviennent toujours.",
+      "Garde ça précieusement.",
+      "Un pas de plus vers quelque chose de bien.",
+      "C'est peu et c'est tout — une bonne journée.",
+      "Les belles journées ne préviennent pas, elles arrivent.",
+      "Tu méritais celle-là.",
+      "Comme une page bien tournée.",
+      "Un sourire quelque part dans la journée, ça compte.",
+      "La légèreté, c'est rare — profites-en.",
+      "Les bonnes journées font le tissu des bons souvenirs.",
+      "Il suffisait de pas grand chose, et c'était bien.",
+      "Le genre de journée dont on se souvient sans raison précise.",
+      "Quelque chose dans l'air était juste aujourd'hui.",
+      "C'est noté. C'était bien.",
+      "Une bonne journée vaut mille promesses.",
+      "Même les journées ordinaires peuvent être douces.",
+      "L'essentiel a été là, aujourd'hui.",
+      "Ce genre de jour-là, on voudrait le mettre en bocal.",
+      "Tout n'est pas parfait, mais aujourd'hui s'approchait.",
+      "Un jour où les choses ont leur place.",
+    ],
+    bad: [
+      "Les mauvaises journées finissent elles aussi.",
+      "Ça arrive. Et ça passe.",
+      "Même les jours difficiles font partie du compte.",
+      "Demain est une autre page.",
+      "Il n'y a pas de mauvaise journée sans lendemain.",
+      "C'est noté. Et c'est déjà derrière toi.",
+      "Certains jours sont là pour rappeler que les autres sont doux.",
+      "Une journée difficile n'efface pas les bonnes.",
+      "Parfois, juste traverser la journée, c'est suffisant.",
+      "La nuit remet les compteurs à zéro.",
+      "Ce n'était pas le meilleur des jours. Ce n'est pas grave.",
+      "Les jours gris font ressortir les jours de soleil.",
+      "Même fatigué, tu as continué. C'est quelque chose.",
+      "Tout ne peut pas être lumineux. Et c'est humain.",
+      "Une mauvaise journée, ce n'est pas une mauvaise vie.",
+      "Le reste viendra. Pour l'instant, c'est terminé.",
+      "Les jours difficiles ont leur utilité, même cachée.",
+      "Même les orages ont une fin.",
+      "Tu l'as traversée. C'est l'essentiel.",
+      "Certains jours résistent. Toi aussi.",
+      "Ce jour-là est compté — et il appartient déjà au passé.",
+      "Il faut bien des nuages pour apprécier le ciel bleu.",
+      "Mauvaise journée, mais bonne résilience.",
+      "Ça ne durera pas — les mauvaises journées n'ont jamais le dernier mot.",
+      "Même dans les jours difficiles, quelque chose tient.",
+      "Ce soir, pose tout ça et dors.",
+    ],
+    minus: [
+      "On efface, on recommence.",
+      "Une correction dans le grand cahier.",
+      "Retour en arrière autorisé.",
+      "Les erreurs aussi font partie du compte.",
+      "Ce n'était peut-être pas si sûr, après tout.",
+      "On peut toujours revenir sur ses pas.",
+      "Le crayon a une gomme pour une bonne raison.",
+      "Tout peut se réviser.",
+    ],
+  };
+
+  function pickMsg(pool) {
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  /* ── popup ── */
+  let popupTimer = null;
+
+  function showPopup(person, type, delta) {
+    const overlay = document.getElementById('overlay');
+    const dot     = document.getElementById('popup-dot');
+    const accent  = document.getElementById('popup-accent');
+    const msg     = document.getElementById('popup-msg');
+
+    let pool, dotClass, accentText;
+
+    if (delta < 0) {
+      pool      = MSGS.minus;
+      dotClass  = type === 'g' ? `dot-good-${person}` : `dot-bad-${person}`;
+      accentText = '— correction —';
+    } else if (type === 'g') {
+      pool      = MSGS.good;
+      dotClass  = `dot-good-${person}`;
+      accentText = person === 'z' ? '— Z · bonne journée —' : '— N · bonne journée —';
+    } else {
+      pool      = MSGS.bad;
+      dotClass  = `dot-bad-${person}`;
+      accentText = person === 'z' ? '— Z · mauvaise journée —' : '— N · mauvaise journée —';
+    }
+
+    dot.className   = 'popup-dot ' + dotClass;
+    accent.textContent = accentText;
+    msg.textContent    = pickMsg(pool);
+
+    overlay.classList.add('show');
+    if (popupTimer) clearTimeout(popupTimer);
+    popupTimer = setTimeout(hidePopup, 4800);
+  }
+
+  function hidePopup() {
+    document.getElementById('overlay').classList.remove('show');
+    if (popupTimer) { clearTimeout(popupTimer); popupTimer = null; }
+  }
+
+  function closePopup(e) {
+    if (e.target === document.getElementById('overlay')) hidePopup();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') hidePopup(); });
+
+  /* ── counters ── */
+  function barH(v, mx) { return mx ? Math.max(3, Math.round(v / mx * MAX_H)) : 3; }
 
   async function load() {
     try {
-      const res = await fetch('/api/counters');
+      const res  = await fetch('/api/counters');
       const data = await res.json();
-      state.z = data.z ?? 0;
-      state.n = data.n ?? 0;
+      state.z.g = data.zg ?? 0;
+      state.z.b = data.zb ?? 0;
+      state.n.g = data.ng ?? 0;
+      state.n.b = data.nb ?? 0;
       render();
       setStatus('');
     } catch(e) {
@@ -291,7 +613,10 @@
       const res = await fetch('/api/counters', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ z: state.z, n: state.n })
+        body: JSON.stringify({
+          zg: state.z.g, zb: state.z.b,
+          ng: state.n.g, nb: state.n.b,
+        })
       });
       if (!res.ok) throw new Error();
       setStatus('');
@@ -301,26 +626,37 @@
   }
 
   function render() {
-    document.getElementById('digit-z').textContent = state.z;
-    document.getElementById('digit-n').textContent = state.n;
-    document.getElementById('total').textContent   = state.z + state.n;
+    const vals = [state.z.g, state.z.b, state.n.g, state.n.b];
+    const mx   = Math.max(...vals, 1);
+
+    document.getElementById('digit-z').textContent = state.z.g + state.z.b;
+    document.getElementById('digit-n').textContent = state.n.g + state.n.b;
+
+    [['zg', state.z.g], ['zb', state.z.b], ['ng', state.n.g], ['nb', state.n.b]].forEach(([k, v]) => {
+      document.getElementById('count-' + k).textContent = v;
+      document.getElementById('bv-'    + k).textContent = v;
+      document.getElementById('bar-'   + k).style.height = barH(v, mx) + 'px';
+    });
+
+    document.getElementById('total').textContent = vals.reduce((a, b) => a + b, 0);
   }
 
-  function change(col, delta) {
-    state[col] += delta;
+  function change(person, type, delta) {
+    const prev = state[person][type];
+    state[person][type] = Math.max(0, prev + delta);
+    if (state[person][type] === prev && delta < 0) return; // déjà à zéro, pas de popup
     render();
     save();
+    showPopup(person, type, delta);
 
-    const el = document.getElementById('digit-' + col);
+    const el = document.getElementById('digit-' + person);
     el.classList.remove('bump', 'dip');
     void el.offsetWidth;
     el.classList.add(delta > 0 ? 'bump' : 'dip');
     el.addEventListener('animationend', () => el.classList.remove('bump', 'dip'), { once: true });
   }
 
-  function setStatus(msg) {
-    document.getElementById('status').textContent = msg;
-  }
+  function setStatus(msg) { document.getElementById('status').textContent = msg; }
 
   load();
 </script>
