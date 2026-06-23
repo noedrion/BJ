@@ -5,13 +5,18 @@ import sqlite3
 DB = os.environ.get("DB", "/data/counters.db")
 
 KEYS = ("zg", "zb", "ng", "nb")
+META_KEYS = ("theme", "message_zn", "message_nz")
 
 def init_db():
     os.makedirs(os.path.dirname(DB), exist_ok=True)
     con = sqlite3.connect(DB)
     con.execute("CREATE TABLE IF NOT EXISTS counters (id TEXT PRIMARY KEY, val INTEGER DEFAULT 0)")
+    con.execute("CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT DEFAULT '')")
     for k in KEYS:
         con.execute("INSERT OR IGNORE INTO counters VALUES (?, 0)", (k,))
+    con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("theme", "theme-1"))
+    con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("message_zn", ""))
+    con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("message_nz", ""))
     con.commit()
     con.close()
 
@@ -21,11 +26,30 @@ def get_counters():
     con.close()
     return {k: rows.get(k, 0) for k in KEYS}
 
+def get_meta(keys):
+    if not keys:
+        return {}
+    con = sqlite3.connect(DB)
+    rows = dict(con.execute(
+        "SELECT key, value FROM meta WHERE key IN ({})".format(",".join("?" * len(keys))),
+        keys
+    ).fetchall())
+    con.close()
+    return {k: rows.get(k, "") for k in keys}
+
 def set_counters(data):
     con = sqlite3.connect(DB)
     for k in KEYS:
         if k in data:
             con.execute("UPDATE counters SET val=? WHERE id=?", (int(data[k]), k))
+    con.commit()
+    con.close()
+
+def set_meta(data):
+    con = sqlite3.connect(DB)
+    for k in META_KEYS:
+        if k in data:
+            con.execute("INSERT OR REPLACE INTO meta VALUES (?, ?)", (k, str(data[k] or "")))
     con.commit()
     con.close()
 
@@ -36,7 +60,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/counters":
-            body = json.dumps(get_counters()).encode()
+            data = get_counters()
+            data.update(get_meta(META_KEYS))
+            body = json.dumps(data).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", len(body))
@@ -54,7 +80,10 @@ class Handler(BaseHTTPRequestHandler):
             length = int(self.headers.get("Content-Length", 0))
             body   = json.loads(self.rfile.read(length))
             set_counters(body)
-            result = json.dumps(get_counters()).encode()
+            set_meta(body)
+            result = get_counters()
+            result.update(get_meta(META_KEYS))
+            result = json.dumps(result).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", len(result))
