@@ -5,7 +5,7 @@ import sqlite3
 DB = os.environ.get("DB", "/data/counters.db")
 
 KEYS = ("zg", "zb", "ng", "nb")
-META_KEYS = ("theme", "message_zn", "message_nz")
+META_KEYS = ("theme", "message_zn", "message_nz", "jours_sans_course")
 
 def init_db():
     os.makedirs(os.path.dirname(DB), exist_ok=True)
@@ -17,6 +17,7 @@ def init_db():
     con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("theme", "theme-1"))
     con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("message_zn", ""))
     con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("message_nz", ""))
+    con.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", ("jours_sans_course", "0"))
     con.commit()
     con.close()
 
